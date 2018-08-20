@@ -1,0 +1,20 @@
+.toDo{
+   background-color: lightgray;
+
+}
+.done{
+   background-color: #28a745;
+}
+.deleted{
+   background-color: #dc3545;
+}
+
+.edit{
+
+}
+.ul{
+   list-style-type: none;
+}
+.li{
+   list-style-type: none;
+}
