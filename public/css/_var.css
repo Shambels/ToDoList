@@ -1,5 +1,5 @@
 .toDo{
-   background-color: lightgray;
+   background-color: rgb(150, 178, 187);
 
 }
 .done{
@@ -9,12 +9,7 @@
    background-color: #dc3545;
 }
 
-.edit{
-
-}
 #ul{
    list-style-type: none;
 }
-#li{
-   list-style-type: none;
-}
+
