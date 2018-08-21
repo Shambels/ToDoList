@@ -1,18 +1,20 @@
-.toDo{
-   background-color: rgb(150, 178, 187);
+body{
+   background-color: #f8f9fa!important;
+}
+.to-do{
+   background-color: #f8f9fa;
 }
 .done{
    background-color: #28a745;
 }
 .deleted{
-   background-color: #dc3545;
+   background-color: #6c757d;
 }
-/* .noEdit{
-   border: solid 0px;
-   outlin
-};
-.edit{}; */
-
+.noEdit{
+   border: solid white 0px;
+   background-color: rgb(150, 178, 187);
+}
+/* .edit{} */
 #h1{
    font-family: 'Pacifico', cursive;
 }
