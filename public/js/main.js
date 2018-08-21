@@ -3,6 +3,7 @@ var toggleToDoBtn = document.getElementById("toggleToDoBtn");
 var toggleDoneBtn = document.getElementById("toggleDoneBtn");
 var toggleDeletedBtn = document.getElementById("toggleDeletedBtn");
 var ul = document.getElementById("ul");
+var lis = Array.from(document.getElementsByTagName("li"));
 var form = document.getElementById("form");
 var inputs = Array.from(document.getElementsByTagName("input"));
 var regSp = /^\s*$/;
@@ -10,30 +11,36 @@ var onOff = "on";
 var i = 0;
 var previousClass;
 var editInput;
+var toDoList;
+var doneList;
+var deletedList;
+var addToDoneBtns;
+var addToDeletedBtns;
+var editBtns;
 
 function addLi(input) {
    var tested = regSp.test(input.value);
    if (!tested) {
-      ul.innerHTML += '<li id="li' + i + '" class="to-do" ><input id="editInput" class="" readonly mx-4" type="text" placeholder="' + input.value + '"><span id="cardSpan class="d-block text-primary mx-4" >' + input.value + '</span><button class="btn btn-success"><i class="mx-3 fas fa-check-square"></i></button><button class="btn btn-primary"><i class="mx-3 fas fa-edit"></i></button><button class="btn btn-danger"><i class="mx-3 fas fa-trash-alt"></i></button></li>';
-      var AddToDoneBtns = Array.from(document.getElementsByClassName("btn-success"));
-      var AddToDeletedBtns = Array.from(document.getElementsByClassName("btn-danger"));
-      var editBtns= Array.from(document.getElementsByClassName("btn-primary"));
-      let li = document.getElementById("li" + i);
+      ul.innerHTML += '<li id="li' + i + '" class="to-do p-3" ><input id="editInput" class="noEdit" readonly mx-4" type="text" placeholder="' + input.value + '"><button class="btn btn-success"><i class="mx-3 fas fa-check-square"></i></button><button class="btn btn-primary"><i class="mx-3 fas fa-edit"></i></button><button class="btn btn-danger"><i class="mx-3 fas fa-trash-alt"></i></button></li>';
+      addToDoneBtns = Array.from(document.getElementsByClassName("btn-success"));
+      addToDeletedBtns = Array.from(document.getElementsByClassName("btn-danger"));
+      editBtns = Array.from(document.getElementsByClassName("btn-primary"));
+      // let li = document.getElementById("li" + i);
 
-      AddToDoneBtns.forEach(element => {
+      addToDoneBtns.forEach(element => {
          element.addEventListener('click', () => {
             addToDone(element.parentElement);
             update(element.parentElement);
          })
       });
-      AddToDeletedBtns.forEach(element => {
+      addToDeletedBtns.forEach(element => {
          element.addEventListener('click', () => {
             addToDeleted(element.parentElement);
             update(element.parentElement);
          });
       })
       editBtns.forEach(element => {
-         element.addEventListener('click',()=> {
+         element.addEventListener('click', () => {
             edit(element.parentElement);
          })
       });
@@ -42,45 +49,57 @@ function addLi(input) {
 
    }
 }
-function edit(elem){
-   if(elem.firstElementChild.readOnly==true){
-   elem.firstElementChild.readOnly=false;
-   console.log(elem.firstElementChild.readOnly)
+
+function edit(elem) {
+   // console.log(elem);
+   if (elem.firstElementChild.readOnly == true) {
+      elem.firstElementChild.readOnly = false;
+      elem.firstElementChild.focus();
+      elem.firstElementChild.classList.remove("noEdit");
+      elem.firstElementChild.classList.add("edit");
+   } else {
+      elem.firstElementChild.classList.remove("edit");
+      elem.firstElementChild.classList.add("noEdit");
+      elem.firstElementChild.readOnly = true;
    }
 }
 
 function update(elem) {
-   // check if button.parentElement is in an active list(toDo, Done, Deleted), and display/hide it.
-   // toDoList = Array.from(document.getElementsByClassName("to-do"))
-   if (elem.classList.contains("to-do") == true) {
-      if(toggleToDoBtn.getAttribute("aria-pressed") == true) {
-         elem.classList.remove("d-none");
-         elem.classList.add("d-block");
+   // check if the li(parent of the button) is in an active list(toDo, Done, Deleted), and displays/hides it.
+   toDoList = Array.from(document.getElementsByClassName("to-do"));
+   doneList = Array.from(document.getElementsByClassName("done"));
+   deletedList = Array.from(document.getElementsByClassName("delete"));
+   toDoList.forEach(element => {
+      if (toggleToDoBtn.classList.contains("active") == true) {
+         element.classList.remove("d-none");
+         element.classList.add("d-block");
       } else {
-         elem.classList.remove("d-block");
-         elem.classList.add("d-none");
-      }
-   } if (elem.classList.contains("done") == true) {
-         if(toggleDoneBtn.getAttribute("aria-pressed") == true) {
-         elem.classList.remove("d-none");
-         elem.classList.add("d-block");
+         element.classList.remove("d-block");
+         element.classList.add("d-none");
+      };
+   })
+   doneList.forEach(element => {
+      if (toggleDoneBtn.classList.contains("active") == true) {
+         element.classList.remove("d-none");
+         element.classList.add("d-block");
       } else {
-         elem.classList.remove("d-block");
-         elem.classList.add("d-none");
-      }
-   } if (elem.classList.contains("deleted") == true) {
-         if(toggleDeletedBtn.getAttribute("aria-pressed") == true) {
-         elem.classList.remove("d-none");
-         elem.classList.add("d-block");
+         element.classList.remove("d-block");
+         element.classList.add("d-none");
+      };
+   })
+   deletedList.forEach(element => {
+      if (toggleDeletedBtn.classList.contains("active") == true) {
+         element.classList.remove("d-none");
+         element.classList.add("d-block");
       } else {
-         elem.classList.remove("d-block");
-         elem.classList.add("d-none");
+         element.classList.remove("d-block");
+         element.classList.add("d-none");
       }
-   }
+   })
 }
 
 function toggleToDo() {
-   var toDoList = Array.from(document.getElementsByClassName("to-do"));
+   toDoList = Array.from(document.getElementsByClassName("to-do"));
    if (toggleToDoBtn.classList.contains("active") == true) {
       toDoList.forEach(element => {
          element.classList.add("d-none");
@@ -95,7 +114,7 @@ function toggleToDo() {
 }
 
 function toggleDone() {
-   var doneList = Array.from(document.getElementsByClassName("done"));
+   doneList = Array.from(document.getElementsByClassName("done"));
    if (toggleDoneBtn.classList.contains("active") == true) {
       doneList.forEach(element => {
          element.classList.add("d-none");
@@ -110,7 +129,7 @@ function toggleDone() {
 }
 
 function toggleDeleted() {
-   var deletedList = Array.from(document.getElementsByClassName("deleted"));
+   deletedList = Array.from(document.getElementsByClassName("deleted"));
    if (toggleDeletedBtn.classList.contains("active") == true) {
       deletedList.forEach(element => {
          element.classList.add("d-none");
@@ -134,7 +153,6 @@ function addToDone(elem) {
       elem.classList.remove("to-do");
       elem.classList.add("done");
    }
-   // update(elem.parentElement);
 }
 
 
@@ -153,10 +171,9 @@ function addToDeleted(elem) {
       elem.classList.remove("deleted");
       elem.classList.add(previousClass);
    }
-   // update(elem.parentElement);
 }
 // ADD CARD
-addBtn.addEventListener("click" ,() => {
+addBtn.addEventListener("click", () => {
    addLi(inputs[0]);
 })
 // TOGGLE TO DO
@@ -173,3 +190,6 @@ toggleDeletedBtn.addEventListener('click', () => {
 })
 
 // UPDATE
+// lis.forEach(element => {
+//    element.children[]
+// });

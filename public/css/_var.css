@@ -1,6 +1,5 @@
 .toDo{
    background-color: rgb(150, 178, 187);
-
 }
 .done{
    background-color: #28a745;
@@ -8,7 +7,15 @@
 .deleted{
    background-color: #dc3545;
 }
+/* .noEdit{
+   border: solid 0px;
+   outlin
+};
+.edit{}; */
 
+#h1{
+   font-family: 'Pacifico', cursive;
+}
 #ul{
    list-style-type: none;
 }

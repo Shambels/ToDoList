@@ -10,26 +10,25 @@
    <link rel="stylesheet" href="node_modules/@fortawesome/fontawesome-free/css/all.css">
    <link rel="stylesheet" href="node_modules/animate.css/animate.min.css">
    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+   <link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet">
    <title>ToDoList</title>
 </head>
 
 <body>
-   <h1 class="text-center m-0 p-3 bg-info text-light">To Do List</h1>
+   <h1 id="h1" class="text-center m-0 p-3 bg-info text-light">To Do List</h1>
    <div class="p-3 bg-light">
-      <div id="form" class="form-group">
-        <label for=""></label>
+      <div id="form" class="form-group form-collapse collapse d-flex mr-5 my-5">
         <input type="text" class="form-control" name="" id="" aria-describedby="helpId" placeholder="Card Name">
-        <button type="submit" id="addBtn"class="btn btn-info">Add</button>
+        <button type="submit" id="addBtn"class="btn btn-info mx-2"><i class="fas fa-plus"></i></button>
       </div>
    </div>
-   <div>
-      
-      <button id="toggleToDoBtn" data-toggle="button" class="btn btn-light active" aria-pressed="true">To Do</button>
-      <button id="toggleDoneBtn" data-toggle="button" class="btn btn-light">Done</button>
-      <button id="toggleDeletedBtn" data-toggle="button" class="btn btn-light">Deleted</button>
+   <div class="m-4">
+      <button id="toggleAllBtn" dat-toggle="button" class="btn btn-cyan text-secondary px-4 mx-1" aria-pressed="true">All</button>
+      <button id="toggleToDoBtn" data-toggle="button" class="btn btn-info active mx-1" aria-pressed="true">To Do</button>
+      <button id="toggleDoneBtn" data-toggle="button" class="btn btn-info mx-1">Done</button>
+      <button id="toggleDeletedBtn" data-toggle="button" class="btn btn-info mx-1">Deleted</button>
    </div>
    <ul id="ul">
-      
    </ul>
    
    <script src="public/js/main.js"></script>
