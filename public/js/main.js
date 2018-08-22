@@ -8,6 +8,7 @@ var lis = Array.from(document.getElementsByTagName("li"));
 var form = document.getElementById("form");
 var inputs = Array.from(document.getElementsByTagName("input"));
 var regSp = /^\s*$/;
+var regSp2 = /^\s*/;
 var onOff = "on";
 var i = 0;
 var previousClass;
@@ -20,8 +21,8 @@ var addToDeletedBtns;
 var editBtns;
 
 function addLi(input) {
-   var tested = regSp.test(input.value);
-   if (!tested) {
+   if (!regSp.test(input.value)) {
+      input.value = input.value.replace(input.value.match(regSp2)[0], "");
       ul.innerHTML += '<li class="li row to-do shown"><input type="text" id="editInput" value="' + input.value + '" class="col-9 noEdit mx-2 d-inline form-control" aria-describedby="helpId"  readonly type="text"><div class="col-2 mx-auto d-inline"><button class="btn btn-light mx-1"><i class="mx-1 fas fa-edit" ></i></button><button class="btn btn-success mx-1"><i class="mx-2 fas fa-check-square"></i></button><button class="btn btn-secondary mx-1"><i class="mx-2 fas fa-trash-alt"></i></button></div></li>';
 
       addToDoneBtns = Array.from(document.getElementsByClassName("btn-success"));
@@ -54,9 +55,9 @@ function addLi(input) {
 
 
 function edit(elem) {
-   let c=elem.lastElementChild.children;
+   let c = elem.lastElementChild.children;
    if (elem.firstElementChild.readOnly == true) {
-      elem.firstElementChild.addEventListener("keydown",()=>editCheckKey(elem));
+      elem.firstElementChild.addEventListener("keydown", () => editCheckKey(elem));
       elem.firstElementChild.readOnly = false;
       elem.firstElementChild.focus();
       elem.firstElementChild.select();
@@ -187,6 +188,7 @@ function addToDone(elem) {
       elem.classList.add("done");
    }
 }
+
 function addToDeleted(elem) {
    if (elem.classList.contains("deleted") == false) {
       if (elem.classList.contains("to-do") == true && elem.classList.contains("done") == false) {
@@ -203,16 +205,18 @@ function addToDeleted(elem) {
       elem.classList.add(previousClass);
    }
 }
-   function checkKey(input) {
-      if (window.event.keyCode == '13') {
-         addLi(input);
-      }
+
+function checkKey(input) {
+   if (window.event.keyCode == '13') {
+      addLi(input);
    }
-   function editCheckKey(input) {
-      if (window.event.keyCode == '13') {
-         edit(input)
-      }
+}
+
+function editCheckKey(input) {
+   if (window.event.keyCode == '13') {
+      edit(input)
    }
+}
 // ADD CARD
 addBtn.addEventListener("click", () => {
    addLi(inputs[0]);
@@ -232,4 +236,4 @@ toggleDeletedBtn.addEventListener('click', () => {
 // TOGGLE ALL
 toggleAllBtn.addEventListener('click', toggleAll)
 // PRESS ENTER Inputs
-inputs[0].addEventListener("keydown", ()=> checkKey(inputs[0]));
+inputs[0].addEventListener("keydown", () => checkKey(inputs[0]));

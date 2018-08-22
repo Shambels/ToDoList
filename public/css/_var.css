@@ -1,6 +1,12 @@
 body{
    background-color: #f8f9fa!important;
 }
+#homeLink{
+   transition: all .5s!important;
+}
+#homeLink:hover{
+   text-decoration-line: none!important;
+}
 .to-do{
    background-color: #f8f9fa;
    transition: all .5s!important;
@@ -57,6 +63,6 @@ body{
    opacity: 0;
    transform: scaleY(.1)!important;
    line-height: 0px!important;
-   transition: all .5s!important;
    transition-delay: opacity .5s!important;
+   transition: all .5s!important;
 }
