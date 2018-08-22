@@ -22,7 +22,7 @@ var editBtns;
 function addLi(input) {
    var tested = regSp.test(input.value);
    if (!tested) {
-      ul.innerHTML += '<li class="row to-do p-3 d-block"><input type="text" id="editInput" value="' + input.value + '" class="col-9 noEdit mx-2 d-inline form-control" aria-describedby="helpId"  readonly type="text"><div class="ml-auto d-inline"><button class="btn btn-light mx-1"><i class="mx-1 fas fa-edit" ></i></button><button class="btn btn-success mx-1"><i class="mx-2 fas fa-check-square"></i></button><button class="btn btn-secondary mx-1"><i class="mx-2 fas fa-trash-alt"></i></button></div></li>';
+      ul.innerHTML += '<li class="li row to-do shown"><input type="text" id="editInput" value="' + input.value + '" class="col-9 noEdit mx-2 d-inline form-control" aria-describedby="helpId"  readonly type="text"><div class="col-2 mx-auto d-inline"><button class="btn btn-light mx-1"><i class="mx-1 fas fa-edit" ></i></button><button class="btn btn-success mx-1"><i class="mx-2 fas fa-check-square"></i></button><button class="btn btn-secondary mx-1"><i class="mx-2 fas fa-trash-alt"></i></button></div></li>';
 
       addToDoneBtns = Array.from(document.getElementsByClassName("btn-success"));
       addToDeletedBtns = Array.from(document.getElementsByClassName("btn-secondary"));
@@ -48,19 +48,34 @@ function addLi(input) {
       i++;
       input.value = "";
 
+
    }
 }
 
+
 function edit(elem) {
+   let c=elem.lastElementChild.children;
    if (elem.firstElementChild.readOnly == true) {
-      console.log(elem.firstElementChild);
+      elem.firstElementChild.addEventListener("keydown",()=>editCheckKey(elem));
       elem.firstElementChild.readOnly = false;
       elem.firstElementChild.focus();
       elem.firstElementChild.select();
       elem.firstElementChild.classList.remove("noEdit");
-      elem.firstElementChild.classList.add("edit");
+      //hide DONE / DEL / + Buttons
+      for (i = 1; i < c.length; i++) {
+         c[i].classList.add("edit");
+         c[i].firstElementChild.classList.add("edit");
+         c[i].firstElementChild.classList.remove("fas");
+      }
+      addBtn.classList.add("edit");
    } else {
-      elem.firstElementChild.classList.remove("edit");
+      //hide DONE / DEL / + Buttons
+      for (i = 1; i < c.length; i++) {
+         c[i].classList.remove("edit");
+         c[i].firstElementChild.classList.add("fas");
+         c[i].firstElementChild.classList.remove("edit");
+      }
+      addBtn.classList.remove("edit");
       elem.firstElementChild.classList.add("noEdit");
       elem.firstElementChild.readOnly = true;
    }
@@ -68,35 +83,34 @@ function edit(elem) {
 
 function update(elem) {
    // check if the li(parent of the button) is in an active list(toDo, Done, Deleted), and displays/hides it.
-
    toDoList = Array.from(document.getElementsByClassName("to-do"));
    doneList = Array.from(document.getElementsByClassName("done"));
    deletedList = Array.from(document.getElementsByClassName("deleted"));
    toDoList.forEach(element => {
       if (toggleToDoBtn.classList.contains("active") == true) {
-         element.classList.remove("d-none");
-         element.classList.add("d-block");
+         element.classList.remove("hidden");
+         element.classList.add("shown");
       } else {
-         element.classList.remove("d-block");
-         element.classList.add("d-none");
+         element.classList.remove("shown");
+         element.classList.add("hidden");
       };
    })
    doneList.forEach(element => {
       if (toggleDoneBtn.classList.contains("active") == true) {
-         element.classList.remove("d-none");
-         element.classList.add("d-block");
+         element.classList.remove("hidden");
+         element.classList.add("shown");
       } else {
-         element.classList.remove("d-block");
-         element.classList.add("d-none");
+         element.classList.remove("shown");
+         element.classList.add("hidden");
       };
    })
    deletedList.forEach(element => {
       if (toggleDeletedBtn.classList.contains("active") == true) {
-         element.classList.remove("d-none");
-         element.classList.add("d-block");
+         element.classList.remove("hidden");
+         element.classList.add("shown");
       } else {
-         element.classList.remove("d-block");
-         element.classList.add("d-none");
+         element.classList.remove("shown");
+         element.classList.add("hidden");
       }
    })
 }
@@ -121,13 +135,13 @@ function toggleToDo() {
    toDoList = Array.from(document.getElementsByClassName("to-do"));
    if (toggleToDoBtn.classList.contains("active") == true) {
       toDoList.forEach(element => {
-         element.classList.add("d-none");
-         element.classList.remove("d-block");
+         element.classList.add("hidden");
+         element.classList.remove("shown");
       });
    } else {
       toDoList.forEach(element => {
-         element.classList.add("d-block");
-         element.classList.remove("d-none");
+         element.classList.add("shown");
+         element.classList.remove("hidden");
       });
    }
 }
@@ -136,13 +150,13 @@ function toggleDone() {
    doneList = Array.from(document.getElementsByClassName("done"));
    if (toggleDoneBtn.classList.contains("active") == true) {
       doneList.forEach(element => {
-         element.classList.add("d-none");
-         element.classList.remove("d-block");
+         element.classList.add("hidden");
+         element.classList.remove("shown");
       });
    } else {
       doneList.forEach(element => {
-         element.classList.add("d-block");
-         element.classList.remove("d-none");
+         element.classList.add("shown");
+         element.classList.remove("hidden");
       });
    }
 }
@@ -151,13 +165,13 @@ function toggleDeleted() {
    deletedList = Array.from(document.getElementsByClassName("deleted"));
    if (toggleDeletedBtn.classList.contains("active") == true) {
       deletedList.forEach(element => {
-         element.classList.add("d-none");
-         element.classList.remove("d-block");
+         element.classList.add("hidden");
+         element.classList.remove("shown");
       });
    } else {
       deletedList.forEach(element => {
-         element.classList.add("d-block");
-         element.classList.remove("d-none");
+         element.classList.add("shown");
+         element.classList.remove("hidden");
       });
    }
 }
@@ -173,8 +187,6 @@ function addToDone(elem) {
       elem.classList.add("done");
    }
 }
-
-
 function addToDeleted(elem) {
    if (elem.classList.contains("deleted") == false) {
       if (elem.classList.contains("to-do") == true && elem.classList.contains("done") == false) {
@@ -191,6 +203,16 @@ function addToDeleted(elem) {
       elem.classList.add(previousClass);
    }
 }
+   function checkKey(input) {
+      if (window.event.keyCode == '13') {
+         addLi(input);
+      }
+   }
+   function editCheckKey(input) {
+      if (window.event.keyCode == '13') {
+         edit(input)
+      }
+   }
 // ADD CARD
 addBtn.addEventListener("click", () => {
    addLi(inputs[0]);
@@ -209,3 +231,5 @@ toggleDeletedBtn.addEventListener('click', () => {
 })
 // TOGGLE ALL
 toggleAllBtn.addEventListener('click', toggleAll)
+// PRESS ENTER Inputs
+inputs[0].addEventListener("keydown", ()=> checkKey(inputs[0]));

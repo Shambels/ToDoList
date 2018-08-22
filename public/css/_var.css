@@ -3,22 +3,60 @@ body{
 }
 .to-do{
    background-color: #f8f9fa;
+   transition: all .5s!important;
 }
 .done{
    background-color: #28a745;
+   transition: all .5s!important;
 }
 .deleted{
    background-color: #6c757d;
+   transition: all .5s!important;
 }
 .noEdit{
    border: solid white 0px;
    background-color: rgb(150, 178, 187);
+   transition:all .5s!important;
 }
-/* .edit{} */
+.btn-info{
+   transition: all .5s!important;
+}
+.btn-secondary{
+   transition: all .5s!important;
+}
+.btn-success {
+   transition: all .5s!important;
+}
+
+.edit{
+   height: 0px!important;
+   padding: 0px!important;
+   transform: scale(0.1);
+   
+}
 #h1{
    font-family: 'Pacifico', cursive;
 }
 #ul{
    list-style-type: none;
+   transition: all .5s!important;
+}
+.li{
+   border-radius: .5rem;
 }
 
+.shown{
+   display: flex!important;
+   opacity: 1;
+   padding: 16px!important;
+   transition: all .5s!important;
+}
+.hidden{
+   height: 0px!important;
+   padding: 0px!important;
+   opacity: 0;
+   transform: scaleY(.1)!important;
+   line-height: 0px!important;
+   transition: all .5s!important;
+   transition-delay: opacity .5s!important;
+}
