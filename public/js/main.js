@@ -14,8 +14,6 @@ function addLi(input) {
    if (!regSp.test(input.value)) {
       input.value = input.value.replace(input.value.match(regSp2)[0], "");
       ul.innerHTML += '<li class="' + input.etat + ' li row shown"><input type="text" value="' + input.value + '" class="col-9 noEdit mx-2 d-inline form-control" aria-describedby="helpId" readonly><div class="col-2 mx-auto d-inline"><button class="btn btn-light mx-1"><i class="mx-1 fas fa-edit" ></i></button><button class="btn btn-success mx-1"><i class="mx-2 fas fa-check-square"></i></button><button class="btn btn-secondary mx-1"><i class="mx-2 fas fa-trash-alt"></i></button></div></li>';
-
-      
       addToDoneBtns = Array.from(document.getElementsByClassName("btn-success"));
       addToDeletedBtns = Array.from(document.getElementsByClassName("btn-secondary"));
       editBtns = Array.from(document.getElementsByClassName("btn-light"));
@@ -72,7 +70,6 @@ function edit(elem) {
 }
 
 function update(elem) {
-   // check if the li(parent of the button) is in an active list(toDo, Done, Deleted), and displays/hides it.
    toDoList = Array.from(document.getElementsByClassName("to-do"));
    doneList = Array.from(document.getElementsByClassName("done"));
    deletedList = Array.from(document.getElementsByClassName("deleted"));
@@ -117,7 +114,6 @@ function toggleAll() {
    if (toggleDeletedBtn.classList.contains("active") == false) {
       toggleDeleted();
       toggleDeletedBtn.classList.add("active");
-
    }
 }
 
@@ -228,15 +224,8 @@ inputs[0].addEventListener("keydown", () => checkKey(inputs[0]));
 //IMPORT JSON
 axios.get('base.json')
    .then(function (response) {
-      // handle success
-      console.log(response);
       var json = Array.from(response.data);
       json.forEach(element => {
-         console.log(element)
          addLi(element);
       });
    })
-   .catch(function (error) {
-      // handle error
-      console.log(error);
-   });
