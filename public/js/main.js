@@ -4,7 +4,6 @@ var toggleToDoBtn = document.getElementById("toggleToDoBtn");
 var toggleDoneBtn = document.getElementById("toggleDoneBtn");
 var toggleDeletedBtn = document.getElementById("toggleDeletedBtn");
 var ul = document.getElementById("ul");
-var form = document.getElementById("form");
 var inputs = Array.from(document.getElementsByTagName("input"));
 var regSp = /^\s*$/;
 var regSp2 = /^\s*/;
