@@ -13,12 +13,8 @@ var lis, previousClass, editInput, toDoList, doneList, deletedList, addToDoneBtn
 function addLi(input) {
    if (!regSp.test(input.value)) {
       input.value = input.value.replace(input.value.match(regSp2)[0], "");
-      if (regUpperCase.test(input.value)){
-         var match = input.value.match(regUpperCase);
-         console.log(match);
-         var matchUpper = match[0].toUpperCase();
-         console.log(matchUpper);
-         input.value = input.value.replace(match[0], matchUpper);
+      if (regUpperCase.test(input.value)) {
+         input.value = input.value.replace(input.value.match(regUpperCase)[0], input.value.match(regUpperCase)[0].toUpperCase());
       }
       ul.innerHTML += '<li class="' + input.etat + ' li row shown"><input type="text" value="' + input.value + '" class="col-9 noEdit mx-2 d-inline form-control" aria-describedby="helpId" readonly><div class="col-2 mx-auto d-inline"><button class="btn btn-light mx-1"><i class="mx-1 fas fa-edit" ></i></button><button class="btn btn-success mx-1"><i class="mx-2 fas fa-check-square"></i></button><button class="btn btn-secondary mx-1"><i class="mx-2 fas fa-trash-alt"></i></button></div></li>';
       addToDoneBtns = Array.from(document.getElementsByClassName("btn-success"));
@@ -26,25 +22,27 @@ function addLi(input) {
       editBtns = Array.from(document.getElementsByClassName("btn-light"));
       lis = Array.from(document.getElementsByTagName("li"));
       lis.forEach(element => {
-         update(element);
+         if (!input.etat) {
+            element.classList.add("to-do");
+         }
+         update();
       });
       addToDoneBtns.forEach(element => {
          element.addEventListener('click', () => {
             addToDone(element.parentElement.parentElement);
-            update(element.parentElement.parentElement);
+            update();
          })
       });
       addToDeletedBtns.forEach(element => {
          element.addEventListener('click', () => {
             addToDeleted(element.parentElement.parentElement);
-            update(element.parentElement.parentElement);
+            update();
          });
       })
       editBtns.forEach(element => {
-         element.addEventListener('click', () => {
-            edit(element.parentElement.parentElement);
-         })
-      });
+         element.addEventListener('click', () =>
+            edit(element.parentElement.parentElement))
+      })
       input.value = "";
    }
 }
@@ -52,7 +50,7 @@ function addLi(input) {
 function edit(elem) {
    let c = elem.lastElementChild.children;
    if (elem.firstElementChild.readOnly == true) {
-      elem.firstElementChild.addEventListener("keydown", () => editCheckKey(elem));
+      elem.firstElementChild.addEventListener("keydown", () => checkKey(elem));
       elem.firstElementChild.readOnly = false;
       elem.firstElementChild.focus();
       elem.firstElementChild.select();
@@ -76,35 +74,39 @@ function edit(elem) {
    }
 }
 
-function update(elem) {
+function hide(elem) {
+   elem.classList.remove("shown");
+   elem.classList.add("hidden");
+}
+
+function show(elem) {
+   elem.classList.remove("hidden");
+   elem.classList.add("shown");
+}
+
+function update() {
    toDoList = Array.from(document.getElementsByClassName("to-do"));
    doneList = Array.from(document.getElementsByClassName("done"));
    deletedList = Array.from(document.getElementsByClassName("deleted"));
    toDoList.forEach(element => {
       if (toggleToDoBtn.classList.contains("active") == true) {
-         element.classList.remove("hidden");
-         element.classList.add("shown");
+         show(element);
       } else {
-         element.classList.remove("shown");
-         element.classList.add("hidden");
+         hide(element);
       };
    })
    doneList.forEach(element => {
       if (toggleDoneBtn.classList.contains("active") == true) {
-         element.classList.remove("hidden");
-         element.classList.add("shown");
+         show(element);
       } else {
-         element.classList.remove("shown");
-         element.classList.add("hidden");
+         hide(element);
       };
    })
    deletedList.forEach(element => {
       if (toggleDeletedBtn.classList.contains("active") == true) {
-         element.classList.remove("hidden");
-         element.classList.add("shown");
+         show(element);
       } else {
-         element.classList.remove("shown");
-         element.classList.add("hidden");
+         hide(element);
       }
    })
 }
@@ -128,13 +130,11 @@ function toggleToDo() {
    toDoList = Array.from(document.getElementsByClassName("to-do"));
    if (toggleToDoBtn.classList.contains("active") == true) {
       toDoList.forEach(element => {
-         element.classList.add("hidden");
-         element.classList.remove("shown");
+         hide(element);
       });
    } else {
       toDoList.forEach(element => {
-         element.classList.add("shown");
-         element.classList.remove("hidden");
+         show(element);
       });
    }
 }
@@ -143,13 +143,11 @@ function toggleDone() {
    doneList = Array.from(document.getElementsByClassName("done"));
    if (toggleDoneBtn.classList.contains("active") == true) {
       doneList.forEach(element => {
-         element.classList.add("hidden");
-         element.classList.remove("shown");
+         hide(element);
       });
    } else {
       doneList.forEach(element => {
-         element.classList.add("shown");
-         element.classList.remove("hidden");
+         show(element);
       });
    }
 }
@@ -158,13 +156,11 @@ function toggleDeleted() {
    deletedList = Array.from(document.getElementsByClassName("deleted"));
    if (toggleDeletedBtn.classList.contains("active") == true) {
       deletedList.forEach(element => {
-         element.classList.add("hidden");
-         element.classList.remove("shown");
+         hide(element);
       });
    } else {
       deletedList.forEach(element => {
-         element.classList.add("shown");
-         element.classList.remove("hidden");
+         show(element);
       });
    }
 }
@@ -199,43 +195,23 @@ function addToDeleted(elem) {
 
 function checkKey(input) {
    if (window.event.keyCode == '13') {
-      addLi(input);
+      if (input.classList.contains("li") === true) {
+         edit(input);
+      } else {
+         addLi(input);
+      }
    }
 }
 
-function editCheckKey(input) {
-   if (window.event.keyCode == '13') {
-      edit(input)
-   }
-}
-// ADD CARD
-addBtn.addEventListener("click", () => {
-   addLi(inputs[0]);
-})
-// TOGGLE TO DO
-toggleToDoBtn.addEventListener('click', () => {
-   toggleToDo();
-})
-// TOGGLE DONE
-toggleDoneBtn.addEventListener('click', () => {
-   toggleDone();
-})
-// TOGGLE DELETED
-toggleDeletedBtn.addEventListener('click', () => {
-   toggleDeleted();
-})
-// TOGGLE ALL
-toggleAllBtn.addEventListener('click', toggleAll)
-// PRESS ENTER Inputs
+addBtn.addEventListener("click", () => addLi(inputs[0]));
 inputs[0].addEventListener("keydown", () => checkKey(inputs[0]));
-//IMPORT JSON
-axios.get('base.json')
-   .then(function (response) {
-      var json = Array.from(response.data);
-      json.forEach(element => {
-         addLi(element);
-      });
-   })
+toggleToDoBtn.addEventListener('click', toggleToDo);
+toggleDoneBtn.addEventListener('click', toggleDone);
+toggleDeletedBtn.addEventListener('click', toggleDeleted);
+toggleAllBtn.addEventListener('click', toggleAll);
+axios.get('base.json').then(function (response) {
+   Array.from(response.data).forEach(element => addLi(element));
+})
 
 // A FAIRE
 //

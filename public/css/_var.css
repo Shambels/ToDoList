@@ -46,13 +46,17 @@ body{
    transition: 1s!important;
 }
 #h1:hover{
-   transform: scale(1.5);
+   transform: translateY(18px) scale(1.5);
 }
 #ul{
    list-style-type: none;
+   margin: 0px!important;
    transition: all .5s!important;
+   display: flex;
+   flex-wrap: wrap-reverse;
 }
 .li{
+   width: 100%!important;
    border-radius: .5rem;
 }
 
