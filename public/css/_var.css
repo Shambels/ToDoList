@@ -17,7 +17,7 @@ body{
 }
 .deleted{
    background-color: #6c757d;
-   transition: all .5s!important;
+   transition: all .5s!important;      
 }
 .noEdit{
    border: solid white 0px;
@@ -38,10 +38,15 @@ body{
    height: 0px!important;
    padding: 0px!important;
    transform: scale(0.1);
+   transition: all .5s!important;
    
 }
 #h1{
    font-family: 'Pacifico', cursive;
+   transition: 1s!important;
+}
+#h1:hover{
+   transform: scale(1.5);
 }
 #ul{
    list-style-type: none;

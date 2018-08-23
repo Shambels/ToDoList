@@ -19,11 +19,23 @@ var deletedList;
 var addToDoneBtns;
 var addToDeletedBtns;
 var editBtns;
+// require('es6-promise').polyfill();
+// var axios = require('axios');
+// const axios = require('axios');
 
 function addLi(input) {
    if (!regSp.test(input.value)) {
       input.value = input.value.replace(input.value.match(regSp2)[0], "");
-      ul.innerHTML += '<li class="li row to-do shown"><input type="text" id="editInput" value="' + input.value + '" class="col-9 noEdit mx-2 d-inline form-control" aria-describedby="helpId"  readonly type="text"><div class="col-2 mx-auto d-inline"><button class="btn btn-light mx-1"><i class="mx-1 fas fa-edit" ></i></button><button class="btn btn-success mx-1"><i class="mx-2 fas fa-check-square"></i></button><button class="btn btn-secondary mx-1"><i class="mx-2 fas fa-trash-alt"></i></button></div></li>';
+      ul.innerHTML += '<li class="'+input.etat+' li row shown"><input type="text" value="' + input.value + '" class="col-9 noEdit mx-2 d-inline form-control" aria-describedby="helpId" readonly><div class="col-2 mx-auto d-inline"><button class="btn btn-light mx-1"><i class="mx-1 fas fa-edit" ></i></button><button class="btn btn-success mx-1"><i class="mx-2 fas fa-check-square"></i></button><button class="btn btn-secondary mx-1"><i class="mx-2 fas fa-trash-alt"></i></button></div></li>';
+
+      // if (ul.firstElementChild.classList.contains("to-do") == false && ul.firstElementChild.classList.contains("done") == false && ul.firstElementChild.classList.contains("deleted") == false) {
+      //    ul.firstElementChild.classList.add("to-do");
+      // } 
+      if (ul.firstElementChild.classList.contains("to-do") == false){
+         console.log(ul.firstElementChild)
+         ul.firstElementChild.classList.remove("shown");
+         ul.firstElementChild.classList.add("hidden");
+      }
 
       addToDoneBtns = Array.from(document.getElementsByClassName("btn-success"));
       addToDeletedBtns = Array.from(document.getElementsByClassName("btn-secondary"));
@@ -52,7 +64,6 @@ function addLi(input) {
 
    }
 }
-
 
 function edit(elem) {
    let c = elem.lastElementChild.children;
@@ -237,3 +248,24 @@ toggleDeletedBtn.addEventListener('click', () => {
 toggleAllBtn.addEventListener('click', toggleAll)
 // PRESS ENTER Inputs
 inputs[0].addEventListener("keydown", () => checkKey(inputs[0]));
+
+
+//IMPORT JSON
+axios.get('base.json')
+   .then(function (response) {
+      // handle success
+      console.log(response);
+      var json = Array.from(response.data);
+      json.forEach(element => {
+         console.log(element)
+         addLi(element);
+      });
+   })
+   .catch(function (error) {
+      // handle error
+      console.log(error);
+   });
+
+//A FAIRE:
+//JASON
+// LOUPE MOUSEOVER
