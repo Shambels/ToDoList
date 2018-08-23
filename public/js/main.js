@@ -4,43 +4,25 @@ var toggleToDoBtn = document.getElementById("toggleToDoBtn");
 var toggleDoneBtn = document.getElementById("toggleDoneBtn");
 var toggleDeletedBtn = document.getElementById("toggleDeletedBtn");
 var ul = document.getElementById("ul");
-var lis = Array.from(document.getElementsByTagName("li"));
 var form = document.getElementById("form");
 var inputs = Array.from(document.getElementsByTagName("input"));
 var regSp = /^\s*$/;
 var regSp2 = /^\s*/;
-var onOff = "on";
-var i = 0;
-var previousClass;
-var editInput;
-var toDoList;
-var doneList;
-var deletedList;
-var addToDoneBtns;
-var addToDeletedBtns;
-var editBtns;
-// require('es6-promise').polyfill();
-// var axios = require('axios');
-// const axios = require('axios');
+var lis, previousClass, editInput, toDoList, doneList, deletedList, addToDoneBtns, addToDeletedBtns, editBtns;
 
 function addLi(input) {
    if (!regSp.test(input.value)) {
       input.value = input.value.replace(input.value.match(regSp2)[0], "");
-      ul.innerHTML += '<li class="'+input.etat+' li row shown"><input type="text" value="' + input.value + '" class="col-9 noEdit mx-2 d-inline form-control" aria-describedby="helpId" readonly><div class="col-2 mx-auto d-inline"><button class="btn btn-light mx-1"><i class="mx-1 fas fa-edit" ></i></button><button class="btn btn-success mx-1"><i class="mx-2 fas fa-check-square"></i></button><button class="btn btn-secondary mx-1"><i class="mx-2 fas fa-trash-alt"></i></button></div></li>';
+      ul.innerHTML += '<li class="' + input.etat + ' li row shown"><input type="text" value="' + input.value + '" class="col-9 noEdit mx-2 d-inline form-control" aria-describedby="helpId" readonly><div class="col-2 mx-auto d-inline"><button class="btn btn-light mx-1"><i class="mx-1 fas fa-edit" ></i></button><button class="btn btn-success mx-1"><i class="mx-2 fas fa-check-square"></i></button><button class="btn btn-secondary mx-1"><i class="mx-2 fas fa-trash-alt"></i></button></div></li>';
 
-      // if (ul.firstElementChild.classList.contains("to-do") == false && ul.firstElementChild.classList.contains("done") == false && ul.firstElementChild.classList.contains("deleted") == false) {
-      //    ul.firstElementChild.classList.add("to-do");
-      // } 
-      if (ul.firstElementChild.classList.contains("to-do") == false){
-         console.log(ul.firstElementChild)
-         ul.firstElementChild.classList.remove("shown");
-         ul.firstElementChild.classList.add("hidden");
-      }
-
+      
       addToDoneBtns = Array.from(document.getElementsByClassName("btn-success"));
       addToDeletedBtns = Array.from(document.getElementsByClassName("btn-secondary"));
       editBtns = Array.from(document.getElementsByClassName("btn-light"));
-
+      lis = Array.from(document.getElementsByTagName("li"));
+      lis.forEach(element => {
+         update(element);
+      });
       addToDoneBtns.forEach(element => {
          element.addEventListener('click', () => {
             addToDone(element.parentElement.parentElement);
@@ -58,10 +40,7 @@ function addLi(input) {
             edit(element.parentElement.parentElement);
          })
       });
-      i++;
       input.value = "";
-
-
    }
 }
 
@@ -73,7 +52,7 @@ function edit(elem) {
       elem.firstElementChild.focus();
       elem.firstElementChild.select();
       elem.firstElementChild.classList.remove("noEdit");
-      //hide DONE / DEL / + Buttons
+      //toggle ( DONE / DEL / + )Buttons
       for (i = 1; i < c.length; i++) {
          c[i].classList.add("edit");
          c[i].firstElementChild.classList.add("edit");
@@ -81,7 +60,6 @@ function edit(elem) {
       }
       addBtn.classList.add("edit");
    } else {
-      //hide DONE / DEL / + Buttons
       for (i = 1; i < c.length; i++) {
          c[i].classList.remove("edit");
          c[i].firstElementChild.classList.add("fas");
@@ -188,7 +166,6 @@ function toggleDeleted() {
    }
 }
 
-
 function addToDone(elem) {
    if (elem.classList.contains("done") == true) {
       elem.classList.remove("done");
@@ -248,8 +225,6 @@ toggleDeletedBtn.addEventListener('click', () => {
 toggleAllBtn.addEventListener('click', toggleAll)
 // PRESS ENTER Inputs
 inputs[0].addEventListener("keydown", () => checkKey(inputs[0]));
-
-
 //IMPORT JSON
 axios.get('base.json')
    .then(function (response) {
@@ -265,7 +240,3 @@ axios.get('base.json')
       // handle error
       console.log(error);
    });
-
-//A FAIRE:
-//JASON
-// LOUPE MOUSEOVER
