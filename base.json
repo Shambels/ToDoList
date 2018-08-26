@@ -1,0 +1,26 @@
+[
+  {
+    "value": "comprendre json",
+    "etat": "done"
+  },
+  {
+   "value": "comprendre axios",
+   "etat": "done"
+ },
+ {
+   "value": "flex",
+   "etat": "to-do"
+ },
+ {
+   "value": "qui",
+   "etat": "to-do"
+ },
+ {
+    "value": "toujours les mêmes",
+    "etat": "to-do"
+ },
+ {
+   "value": " ... ",
+   "etat": "deleted"
+ }
+]
