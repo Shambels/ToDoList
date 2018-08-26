@@ -14,24 +14,31 @@ var regUpperCase = /[a-z]{1}/;
 var lis, previousClass, editInput, toDoList, doneList, deletedList, addToDoneBtns, addToDeletedBtns, editBtns;
 
 function addLi(input) {
+   // RegExp Tests:
+   // 1. Don't accept empty(or whitespace) Inputs.
+   // 2. Remove whitespaces at the start.
+   // 3. Uppercase the first character.
    if (!regSp.test(input.value)) {
       input.value = input.value.replace(input.value.match(regSp2)[0], "");
       if (regUpperCase.test(input.value)) {
          input.value = input.value.replace(input.value.match(regUpperCase)[0], input.value.match(regUpperCase)[0].toUpperCase());
       }
+      // Add Li with input value (or base.json element value) as text.
       ul.innerHTML += '<li class="' + input.etat + ' li row shown"><input type="text" value="' + input.value + '" class="col-9 noEdit mx-2 d-inline form-control" aria-describedby="helpId" readonly><div class="col-2 mx-auto d-flex"><button class="btn btn-light mx-1"><i class="mx-1 fas fa-edit" ></i></button><button class="btn btn-success mx-1"><i class="mx-2 fas fa-check-square"></i></button><button class="btn btn-secondary mx-1"><i class="mx-2 fas fa-trash-alt"></i></button></div></li>';
-
+      // Update buttons' arrays.
       addToDoneBtns = Array.from(document.getElementsByClassName("btn-success"));
       addToDeletedBtns = Array.from(document.getElementsByClassName("btn-secondary"));
       editBtns = Array.from(document.getElementsByClassName("btn-light"));
       lis = Array.from(document.getElementsByTagName("li"));
 
+      // Check if input has a pre-defined class from "base.json" file. Add default "to-do" class if none found.
       lis.forEach(element => {
          if (!input.etat) {
             element.classList.add("to-do");
          }
          update();
       });
+      // Add Event-listeners to the buttons
       addToDoneBtns.forEach(element => {
          element.addEventListener('click', () => {
             addToDone(element.parentElement.parentElement);
@@ -48,12 +55,15 @@ function addLi(input) {
          element.addEventListener('click', () =>
             edit(element.parentElement.parentElement))
       })
+      // Reset input value 
       input.value = "";
    }
 }
 
 function edit(elem) {
+   // Toggle Li's Text-Editing.
    let c = elem.lastElementChild.children;
+   //  Start Edit
    if (elem.firstElementChild.readOnly === true) {
       elem.firstElementChild.addEventListener("keydown", () => checkKey(elem));
       elem.firstElementChild.readOnly = false;
@@ -67,7 +77,9 @@ function edit(elem) {
          c[i].firstElementChild.classList.remove("fas");
       }
       addBtn.classList.add("edit");
-   } else {
+   }
+   // Stop Edit.
+   else {
       for (i = 1; i < c.length; i++) {
          c[i].classList.remove("edit");
          c[i].firstElementChild.classList.add("fas");
@@ -83,13 +95,13 @@ function hide(elem) {
    elem.classList.remove("shown");
    elem.classList.add("hidden");
 }
-
 function show(elem) {
    elem.classList.remove("hidden");
    elem.classList.add("shown");
 }
 
 function update() {
+   // Check all Li's category. Hides/ Displays it based on "to-do/done/deleted" filters' (active or inactive) state.
    toDoList = Array.from(document.getElementsByClassName("to-do"));
    doneList = Array.from(document.getElementsByClassName("done"));
    deletedList = Array.from(document.getElementsByClassName("deleted"));
@@ -115,7 +127,7 @@ function update() {
       }
    })
 }
-
+//  TOGGLE filters: self-explanatory
 function toggleAll() {
    // CASE 1 = All are active
    if (toggleToDoBtn.classList.contains("active") === true && toggleDoneBtn.classList.contains("active") === true && toggleDeletedBtn.classList.contains("active") === true) {
@@ -131,7 +143,7 @@ function toggleAll() {
       if (deletedPrevious === "off") {
          toggleDeleted();
          toggleDeletedBtn.classList.remove("active");
-      } 
+      }
       // 1.2 = All were "on" prior to hitting the "Toggle All" Button.
       else if (toDoPrevious === "on" && donePrevious === "on" && deletedPrevious === "on") {
          toggleToDo();
@@ -173,7 +185,6 @@ function toggleAll() {
       }
    }
 }
-
 function toggleToDo() {
    toDoList = Array.from(document.getElementsByClassName("to-do"));
    if (toggleToDoBtn.classList.contains("active") == true) {
@@ -186,16 +197,6 @@ function toggleToDo() {
       });
    }
 }
-
-function toggleToDoPrevious() {
-   if (toggleToDoBtn.classList.contains("active") === true) {
-      toDoPrevious = "off";
-   } else {
-      toDoPrevious = "on";
-   }
-}
-
-
 function toggleDone() {
    doneList = Array.from(document.getElementsByClassName("done"));
    if (toggleDoneBtn.classList.contains("active") === true) {
@@ -208,15 +209,6 @@ function toggleDone() {
       });
    }
 }
-
-function toggleDonePrevious() {
-   if (toggleDoneBtn.classList.contains("active") === true) {
-      donePrevious = "off";
-   } else {
-      donePrevious = "on";
-   }
-}
-
 function toggleDeleted() {
    deletedList = Array.from(document.getElementsByClassName("deleted"));
    if (toggleDeletedBtn.classList.contains("active") === true) {
@@ -229,7 +221,21 @@ function toggleDeleted() {
       });
    }
 }
-
+// "PREVIOUS" functions register filters' "ON/OFF" previous status. So that "ToggleAll" can resume previous filters.
+function toggleToDoPrevious() {
+   if (toggleToDoBtn.classList.contains("active") === true) {
+      toDoPrevious = "off";
+   } else {
+      toDoPrevious = "on";
+   }
+}
+function toggleDonePrevious() {
+   if (toggleDoneBtn.classList.contains("active") === true) {
+      donePrevious = "off";
+   } else {
+      donePrevious = "on";
+   }
+}
 function toggleDeletedPrevious() {
    if (toggleDeletedBtn.classList.contains("active") === true) {
       deletedPrevious = "off";
@@ -237,7 +243,7 @@ function toggleDeletedPrevious() {
       deletedPrevious = "on";
    }
 }
-
+// "ADD TO" functions add Li's to a category + remove then from the other two. When none are selected=> default "To-do"
 function addToDone(elem) {
    if (elem.classList.contains("done") === true) {
       elem.classList.remove("done");
@@ -248,7 +254,6 @@ function addToDone(elem) {
       elem.classList.add("done");
    }
 }
-
 function addToDeleted(elem) {
    if (elem.classList.contains("deleted") === false) {
       if (elem.classList.contains("to-do") === true && elem.classList.contains("done") === false) {
@@ -265,7 +270,7 @@ function addToDeleted(elem) {
       elem.classList.add(previousClass);
    }
 }
-
+// Keyboard Events
 function checkKey(input) {
    if (window.event.keyCode == '13') {
       if (input.classList.contains("li") === true) {
