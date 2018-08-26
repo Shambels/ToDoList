@@ -117,7 +117,9 @@ function update() {
 }
 
 function toggleAll() {
-   if ((toggleToDoBtn.classList.contains("active") === true) && toggleDoneBtn.classList.contains("active") === true && toggleDeletedBtn.classList.contains("active") === true) {
+   // CASE 1 = All are active
+   if (toggleToDoBtn.classList.contains("active") === true && toggleDoneBtn.classList.contains("active") === true && toggleDeletedBtn.classList.contains("active") === true) {
+      //  1.1 = Some previously were "off"
       if (toDoPrevious === "off") {
          toggleToDo();
          toggleToDoBtn.classList.remove("active");
@@ -129,8 +131,34 @@ function toggleAll() {
       if (deletedPrevious === "off") {
          toggleDeleted();
          toggleDeletedBtn.classList.remove("active");
+      } 
+      // 1.2 = All were "on" prior to hitting the "Toggle All" Button.
+      else if (toDoPrevious === "on" && donePrevious === "on" && deletedPrevious === "on") {
+         toggleToDo();
+         toggleToDoPrevious();
+         toggleToDoBtn.classList.remove("active");
+         toggleDone();
+         toggleDonePrevious();
+         toggleDoneBtn.classList.remove("active");
+         toggleDeleted();
+         toggleDeletedPrevious();
+         toggleDeletedBtn.classList.remove("active");
       }
-   } else {
+   }
+   // CASE 2 = All are inactive
+   else if (toggleToDoBtn.classList.contains("active") === false && toggleDoneBtn.classList.contains("active") === false && toggleDeletedBtn.classList.contains("active") === false) {
+      toggleToDo();
+      toggleToDoPrevious();
+      toggleToDoBtn.classList.add("active");
+      toggleDone();
+      toggleDonePrevious();
+      toggleDoneBtn.classList.add("active");
+      toggleDeleted();
+      toggleDeletedPrevious();
+      toggleDeletedBtn.classList.add("active");
+   }
+   // CASE 3 = Some are active
+   else {
       if (toggleToDoBtn.classList.contains("active") === false) {
          toggleToDo();
          toggleToDoBtn.classList.add("active");
@@ -158,6 +186,7 @@ function toggleToDo() {
       });
    }
 }
+
 function toggleToDoPrevious() {
    if (toggleToDoBtn.classList.contains("active") === true) {
       toDoPrevious = "off";
@@ -251,7 +280,7 @@ addBtn.addEventListener("click", () => addLi(inputs[0]));
 inputs[0].addEventListener("keydown", () => checkKey(inputs[0]));
 toggleToDoBtn.addEventListener('click', () => {
    toggleToDo();
-   toggletoDoPrevious();
+   toggleToDoPrevious();
 });
 toggleDoneBtn.addEventListener('click', () => {
    toggleDone();
